@@ -1,0 +1,9 @@
+function click(){
+for(var i=0;i<500;i++){
+var e = document.createEvent("MouseEvents");
+
+e.initEvent("click", true, true);
+
+document.getElementById("MainClick").dispatchEvent(e);}
+}
+var t1 = window.setInterval(click,100); 
