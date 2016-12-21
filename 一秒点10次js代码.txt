@@ -1,3 +1,4 @@
+//copy到console里，修改id，可以对该id点击多次
 function click(){
 for(var i=0;i<500;i++){
 var e = document.createEvent("MouseEvents");
