@@ -1,5 +1,8 @@
 package num2Voice;
 
+import java.util.HashMap;
+
+
 /*
 【整数数字转读音】
 string num2Voice(int num) { … }
@@ -7,14 +10,17 @@ string num2Voice(int num) { … }
 
 public class num2Voice {
 	
-	public static  void num2Voice(int num){
+	
+	public static void num2Voice(int num){
+		
+
 		String numStr = String.valueOf(num);
 		char[] numArray = numStr.toCharArray();
 		for (int i = 0; i <numStr.length(); i++) {
 
 			int index = numStr.length()-i;
 			if(numArray[i]=='0'){
-				if(index==5&&numStr.length()<9){
+				if(index==5){
 					System.out.print("万");
 				}else if(index==9){
 					System.out.print("亿");
@@ -23,7 +29,7 @@ public class num2Voice {
 				}
 				
 			}else{
-			System.out.print(numArray[i]);
+			System.out.print(transfer(numArray[i]));
 			if(index%4==1){
 				if(index/4==0){
 					System.out.print(" ");
@@ -44,8 +50,26 @@ public class num2Voice {
 		}
 	}
 	
+	public static char transfer(char num){
+		
+		switch (num){
+		case '1': return '一';
+		case '2': return '二';
+		case '3': return '三';
+		case '4': return '四';
+		case '5': return '五';
+		case '6': return '六';
+		case '7': return '七';
+		case '8': return '八';
+		case '9': return '九';
+		
+		default : return ' ';
+		}
+
+	}
+	
 	public static void main(String[] args) {
-		int num = 12345678;
+		int num = 12345;
 		num2Voice(num);
 	}
 
