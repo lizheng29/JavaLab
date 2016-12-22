@@ -16,14 +16,16 @@ public class num2Voice {
 
 		String numStr = String.valueOf(num);
 		char[] numArray = numStr.toCharArray();
+		int flag = 0;
 		for (int i = 0; i <numStr.length(); i++) {
 
 			int index = numStr.length()-i;
 			if(numArray[i]=='0'){
-				if(index==5){
+				if(index==5&&flag!=1){
 					System.out.print("万");
 				}else if(index==9){
 					System.out.print("亿");
+					flag=1;
 				}else{
 					continue;
 				}
@@ -37,6 +39,7 @@ public class num2Voice {
 					System.out.print("万");
 				}else if(index/4==2){
 					System.out.print("亿");
+					flag=1;
 				}
 				
 			}else if (index%4==2){
