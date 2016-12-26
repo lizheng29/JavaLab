@@ -23,9 +23,8 @@ public class PrintCharacter {
 	
 	public static void main(String[] args) {
 		CharacterCode characterCode = new CharacterCode();
-		int[] code= characterCode.C;
+		int[] code= characterCode.A;
 		print(code);
-		
 	}
 
 }
