@@ -51,7 +51,7 @@ public class RelfectionTest {
 		}
 		
 		//实例化一个新的bean
-		MySelfInfo m = (MySelfInfo)myClass.newInstance();
+		MySelfInfo m = (MySelfInfo) Class.forName("javaReflection.MySelfInfo").newInstance();
 		m.name = "LZ";
 		m.sex = 1;
 		//设置身高（私有属性）
@@ -67,6 +67,10 @@ public class RelfectionTest {
 		//用反射调用bean的方法
 		Method method =m.getClass().getMethod("showMe");
 		method.invoke(m);
+		//用反射获取方法上自定义的注解
+		String annotationName = m.getClass().getMethod("showMe").getAnnotation(MyAnnotation.class).name();
+		int annotationLength = m.getClass().getMethod("showMe").getAnnotation(MyAnnotation.class).length();
+		System.out.println("annotationName:"+annotationName+"  "+"annotationLength:"+annotationLength);
 		//m.showMe();
 		
 	}

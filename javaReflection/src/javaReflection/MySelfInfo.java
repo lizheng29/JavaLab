@@ -10,6 +10,7 @@ public class MySelfInfo {
 	
 	private double weight;
 	
+	@MyAnnotation
 	public void showMe(){
 		
 		System.out.println("我的个人信息：");
