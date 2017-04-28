@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MyHtml.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+    <p th:text="'random number : '+${random}">这里不显示？</p>
+    
+    <a th:href="@{http://www.baidu.com}">百度</a>
+    
+    <table>
+    <tr>
+      <th>name</th>
+      <th>age</th>
+      <th>length</th>
+      <th>del</th>
+    </tr>
+    <tr th:each="person : ${persons}">
+      <td th:text="${person.name}">默认名字？</td>
+      <td th:text="${person.age}+'岁'">2.41</td>
+      <td th:text="${person.length}+'cm'">123</td>
+      <td><a th:href="@{/delete/{id}(id=${person.id})}">删除</a></td>
+    </tr>
+  </table>
+  
+  <form action="#" th:action="@{/add}" th:object="${emptyPerson}" method="post">
+    	
+    	<span>姓名：</span> <input type="text" name="name" value="" th:field="*{name}" />  
+    	<input type="submit" value="生成" />
+    </form>
+  </body>
+</html>
