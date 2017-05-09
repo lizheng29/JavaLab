@@ -3,16 +3,20 @@ package subsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStateMap.Byte0;
+
 public class Solution {
     public void subsets(int[] nums) {
     	
     	//List<List<Integer>> result = new ArrayList<List<Integer>>();
     	int limit = 1 << nums.length;
+    	//System.out.println(Integer.toBinaryString(limit));
     	int i, j, k;
     	for (i = 0; i < limit; i++)  
         {  
                 j = i;  
                 k = 0;  
+                System.out.println(Integer.toBinaryString(j));
                 System.out.print("{");  
                 while (j!=0)  
                 {  
