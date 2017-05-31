@@ -13,4 +13,6 @@ public interface ArticleService {
 	void index() throws Exception;
 	
 	List<Article> searchList();
+	
+	String analyze(String text);
 }

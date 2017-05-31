@@ -12,13 +12,16 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.indices.Analyze;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.GetMapping;
 import io.searchbox.indices.mapping.PutMapping;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -173,6 +176,18 @@ public class JestService {
         DocumentResult dr = jestClient.execute(new Delete.Builder(id).index(indexName).type(typeName).build());  
         return dr.isSucceeded();  
     }  
+    
+   
+    public String analyze(String text){
+    	try {
+			JestResult jr = jestClient.execute(new Analyze.Builder().text(text).build());
+			return jr.getJsonString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	return null;
+    }
       
     /**  
      * 关闭JestClient客户端  

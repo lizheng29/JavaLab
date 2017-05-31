@@ -11,6 +11,7 @@ import lizheng.model.Article;
 import lizheng.service.ArticleService;
 import lizheng.service.JestService;
 
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequestBuilder;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -41,14 +42,21 @@ public class ArticleServiceimp implements ArticleService {
 		a2.setContent("大家好，这个是第二篇Article");
 		a2.setPostTime(new Date());
 		
+		Article a3 = new Article();
+		//a3.setId(3L);
+		a3.setContent("大家好，这个是自动创建Index的Article");
+		a3.setPostTime(new Date());
+		
 		List<Object> aList = new ArrayList<Object>();
-		aList.add(a1);
-		aList.add(a2);
-		jestService.index("article", "introduce", aList);
+		//aList.add(a1);
+		//aList.add(a2);
+		aList.add(a3);
+		jestService.index("article_automake", "introduce_automake", aList);
 	}
 
 	@Override
 	public List<Article> searchList() {
+		
 		SearchSourceBuilder searchSourceBuilder =SearchSourceBuilder.searchSource();
 		BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 		boolQuery.must(QueryBuilders.termQuery("id", 1L));
@@ -109,6 +117,11 @@ public class ArticleServiceimp implements ArticleService {
 	        }
 	        logger.info(mappingBuilder.string());
 	        System.out.println("==================create mapping======================="+jestService.createIndexMapping("article", "introduce", mappingBuilder.string()));
+	}
+
+	@Override
+	public String analyze(String text) {
+		return jestService.analyze(text);
 	}
 
 }

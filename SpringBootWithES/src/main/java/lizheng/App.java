@@ -9,7 +9,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  *
  */
 @SpringBootApplication
-public class App extends SpringBootServletInitializer{
+public class App {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(App.class);
 		app.run(args);

@@ -54,4 +54,9 @@ public class ArticleController {
 	public String hello() throws Exception{
 		return "hello world";
 	}
+	
+	@GetMapping(value = "/analyze")
+	public String analyze() throws Exception{
+		return articleService.analyze("Jest maven repository is hosted on Sonatype which is then synced to Maven Central with a slight delay.");
+	}
 }
