@@ -13,7 +13,7 @@ public class RelfectionTest {
 		mySelfInfo.sex = 1;
 		mySelfInfo.showMe();*/
 		
-		Class myClass = Class.forName("javaReflection.MySelfInfo");
+		Class<?> myClass = Class.forName("javaReflection.MySelfInfo");
 		System.out.println("获取构造方法信息");
 		Constructor[] constructors = myClass.getConstructors();
 		for(Constructor constructor : constructors) {
