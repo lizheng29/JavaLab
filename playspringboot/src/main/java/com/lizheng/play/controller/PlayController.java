@@ -1,11 +1,19 @@
 package com.lizheng.play.controller;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
@@ -16,6 +24,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lizheng.play.model.Person;
 import com.lizheng.play.respository.PersonRepository;
@@ -48,10 +58,10 @@ public class PlayController {
 		// 查询分页对象并排序
 		//Page<Person> page = personRepository.findAll(new PageRequest(0,10,Direction.ASC,"age","length"));
 		// 使用流式查询
-		try(Stream<Person> personStream = personRepository.streamAll()){
+		/*try(Stream<Person> personStream = personRepository.streamAll()){
 			personStream.forEach(person -> System.out.println(person.getName()));
 			personStream.close();
-		}
+		}*/
 		
 		model.addAttribute("random", Math.random());
 		model.addAttribute("persons", persons);
@@ -60,10 +70,21 @@ public class PlayController {
 		
 	}
 	
+	
 	@PostMapping(value="/add")
+	@RequiresRoles("admin")
+	@RequiresPermissions("添加666")
 	public String addPerson(HttpServletResponse response,Person emptyPerson){
 		emptyPerson.setAge((int)(Math.random()*100));
 		emptyPerson.setLength((int)(Math.random()*10+10));
+		
+		/*Subject subject = SecurityUtils.getSubject();
+		if(subject.hasRole("admin")){
+			System.out.println("has role admin");
+		}
+		if(subject.isPermitted("添加")){
+			System.out.println("has permition 添加");
+		}*/
 		personRepository.save(emptyPerson);
 		/*try {
 			response.sendRedirect("/");
@@ -82,4 +103,35 @@ public class PlayController {
 			e.printStackTrace();
 		}
 	}
+	
+	@GetMapping(value="/403")
+	public String unAuth(){
+		return "403";
+	}
+	
+	/**
+	 * ajax登录请求
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	@RequestMapping(value="/ajaxLogin",method=RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> submitLogin(String username, String password,Model model) {
+	    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+	    try {
+
+	    	AuthenticationToken  token = new UsernamePasswordToken ("lizheng", "lizheng");
+	        SecurityUtils.getSubject().login(token);
+	        resultMap.put("status", 200);
+	        resultMap.put("message", "登录成功");
+
+	    } catch (Exception e) {
+	        resultMap.put("status", 500);
+	        resultMap.put("message", e.getMessage());
+	    }
+	    return resultMap;
+	}
+	
+	
 }
