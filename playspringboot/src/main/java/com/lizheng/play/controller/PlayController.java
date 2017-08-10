@@ -42,6 +42,7 @@ public class PlayController {
 	@GetMapping(value="/")
 	@Transactional(readOnly = true)
 	public String getPersons(Model model){
+
 		Person empty = new Person();
 		// 使用自定义语句方式查询并排序
 		//List<Person> persons= personRepository.findAllOrderByAgeAsc();
@@ -73,11 +74,11 @@ public class PlayController {
 	
 	@PostMapping(value="/add")
 	@RequiresRoles("admin")
-	@RequiresPermissions("添加666")
+	//@RequiresPermissions("添加666")
 	public String addPerson(HttpServletResponse response,Person emptyPerson){
 		emptyPerson.setAge((int)(Math.random()*100));
 		emptyPerson.setLength((int)(Math.random()*10+10));
-		
+
 		/*Subject subject = SecurityUtils.getSubject();
 		if(subject.hasRole("admin")){
 			System.out.println("has role admin");
@@ -116,8 +117,8 @@ public class PlayController {
 	 * @return
 	 */
 	@RequestMapping(value="/ajaxLogin",method=RequestMethod.GET)
-	@ResponseBody
-	public Map<String,Object> submitLogin(String username, String password,Model model) {
+	//@ResponseBody
+	public String submitLogin(String username, String password,Model model) {
 	    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 	    try {
 
@@ -130,7 +131,7 @@ public class PlayController {
 	        resultMap.put("status", 500);
 	        resultMap.put("message", e.getMessage());
 	    }
-	    return resultMap;
+	    return "redirect:/";
 	}
 	
 	
