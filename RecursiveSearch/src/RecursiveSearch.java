@@ -4,7 +4,7 @@ public class RecursiveSearch {
 	public static void recursiveSearch(int[] data, int start ,int end ,int target){
 		
 		
-		int m = start + (end-start)/2;
+		int m = start + (end-start)>>1;
 		if(target==data[m]){
 			System.out.println("查找的数据为："+data[m] + "下标为："+m);
 		}else if(target<data[m]){
