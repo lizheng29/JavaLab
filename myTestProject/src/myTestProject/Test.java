@@ -2,6 +2,9 @@ package myTestProject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -230,6 +233,27 @@ public class Test {
         System.out.printf("HH:MM格式（24时制）：%tR", date);
     }
 
+    public static void instantTest(){
+        // 获取北京时间
+        Instant now = Instant.now();
+        OffsetDateTime bjNow = now.atOffset(ZoneOffset.ofHours(8));
+        OffsetDateTime bjBefore =  bjNow.plusMinutes(-30);
+        System.out.println(bjNow);
+        System.out.println(bjBefore);
+
+        System.out.println(bjNow.toInstant().toEpochMilli());
+        System.out.println(System.currentTimeMillis());
+        System.out.println(now.toEpochMilli());
+
+        String url = "http://smart-asr-test.tinetcloud" +
+                ".com:2333/asr_callback/3000000-20170831161301-01089170766-18500136173-record-10.10.1.212" +
+                "-1504167183.61-in.wav/tinet";
+        System.out.println(url.split("/")[4]);
+
+        String fileName = "3000000-20170904162338-18330691161-18330691161-record-10.10.1.212-1504513418.57-in.wav";
+        System.out.println(fileName.substring(0,fileName.lastIndexOf(".")));
+    }
+
     public static void main(String[] args) {
         // calendarTest();
         // hashTest();
@@ -239,6 +263,7 @@ public class Test {
         // stringTest();
         // PrimitiveTypeTest();
         // charTest();
-        printfDateTest();
+        //printfDateTest();
+        instantTest();
     }
 }
