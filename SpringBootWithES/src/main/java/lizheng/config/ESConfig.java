@@ -17,7 +17,7 @@ public class ESConfig {
 	public JestClient getJestClient() {
 
 		JestClientFactory factory = new JestClientFactory();
-		factory.setHttpClientConfig(new HttpClientConfig.Builder("http://172.16.203.98:9200")
+		factory.setHttpClientConfig(new HttpClientConfig.Builder("http://54.222.137.226:9200")
 				.gson(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'hh:mm:ss").create()).connTimeout(1500)
 				.readTimeout(3000).multiThreaded(true).build());
 		return factory.getObject();

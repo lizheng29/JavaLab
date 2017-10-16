@@ -124,4 +124,6 @@ public class ArticleServiceimp implements ArticleService {
 		return jestService.analyze(text);
 	}
 
+
+
 }

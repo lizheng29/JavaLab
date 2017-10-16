@@ -5,6 +5,7 @@ import java.util.List;
 import lizheng.model.Article;
 import lizheng.service.ArticleService;
 
+import lizheng.service.JestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,9 @@ public class ArticleController {
 
 	@Autowired
 	ArticleService 	articleService;
+
+	@Autowired
+	private JestService jestService;
 	
 	@GetMapping(value = "/createIndex")
 	public String show(){
@@ -52,7 +56,7 @@ public class ArticleController {
 	
 	@GetMapping(value = "/hello")
 	public String hello() throws Exception{
-		return "hello world";
+		return jestService.generateSearchString();
 	}
 	
 	@GetMapping(value = "/analyze")
