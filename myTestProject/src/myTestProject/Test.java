@@ -1,10 +1,16 @@
 package myTestProject;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -233,13 +239,16 @@ public class Test {
         System.out.printf("HH:MM格式（24时制）：%tR", date);
     }
 
-    public static void instantTest(){
+    public static void instantTest() {
         // 获取北京时间
         Instant now = Instant.now();
         OffsetDateTime bjNow = now.atOffset(ZoneOffset.ofHours(8));
-        OffsetDateTime bjBefore =  bjNow.plusMinutes(-30);
+        OffsetDateTime bjBefore = bjNow.plusMinutes(-30);
         System.out.println(bjNow);
         System.out.println(bjBefore);
+
+        System.out.println("now.getEpochSecond():" + now.getEpochSecond());
+        System.out.println("System.currentTimeMillis():" + System.currentTimeMillis());
 
         System.out.println(bjNow.toInstant().toEpochMilli());
         System.out.println(System.currentTimeMillis());
@@ -250,8 +259,47 @@ public class Test {
                 "-1504167183.61-in.wav/tinet";
         System.out.println(url.split("/")[4]);
 
-        String fileName = "3000000-20170904162338-18330691161-18330691161-record-10.10.1.212-1504513418.57-in.wav";
-        System.out.println(fileName.substring(0,fileName.lastIndexOf(".")));
+        String fileName = "3000000-20171017142338-18330691161-18330691161-record-10.10.1.212-1504513418.57-in.wav";
+        System.out.println(fileName.substring(0, fileName.lastIndexOf(".")));
+
+
+        String dateString = fileName.split("-")[1];
+        LocalDateTime cdrTime = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern
+                ("yyyyMMddHHmmss"));
+        System.out.println(cdrTime);
+        if (cdrTime.plusHours(6).isBefore(LocalDateTime.now())) {
+            System.out.println("从" + cdrTime + "到现在，超过了6小时");
+        }
+    }
+
+    public static void fileTest() {
+
+        try {
+            URI uri = new URI("http://clink-voice-wav.s3.cn-north-1.amazonaws.com" +
+                    ".cn/4144003/20171024/3004414-20171024145142-18703881273-01043989530-record-10.10.62.252" +
+                    "-1508827902.104092-in.wav?response-content-disposition=attachment%3B%20filename%3D3004414" +
+                    "-20171024145142-18703881273-01043989530-record-10.10.62.252-1508827902.104092-in" +
+                    ".wav&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20171024T065415Z&X-Amz-SignedHeaders=host&X-Amz" +
+                    "-Expires=86400&X-Amz-Credential=AKIAPPHJOV2EGMJMH4DQ%2F20171024%2Fcn-north-1%2Fs3%2Faws4_request&X" +
+                    "-Amz-Signature=20c4eb0862d3bbc5a9df9cac581e955569fe360e6fbc2375565f78b6fcfa7159");
+
+            URL url = new URL("http://clink-voice-wav.s3.cn-north-1.amazonaws.com" +
+                    ".cn/4144003/20171024/3004414-20171024145142-18703881273-01043989530-record-10.10.62.252" +
+                    "-1508827902.104092-in.wav?response-content-disposition=attachment%3B%20filename%3D3004414" +
+                    "-20171024145142-18703881273-01043989530-record-10.10.62.252-1508827902.104092-in" +
+                    ".wav&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20171024T065415Z&X-Amz-SignedHeaders=host&X-Amz" +
+                    "-Expires=86400&X-Amz-Credential=AKIAPPHJOV2EGMJMH4DQ%2F20171024%2Fcn-north-1%2Fs3%2Faws4_request&X" +
+                    "-Amz-Signature=20c4eb0862d3bbc5a9df9cac581e955569fe360e6fbc2375565f78b6fcfa7159");
+            //File file = new Path(url.getPath()).toFile();
+            File file = null;
+            file = new File(url.toURI());
+            boolean isExists = file.exists();
+            System.out.println(isExists);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public static void main(String[] args) {
@@ -264,6 +312,7 @@ public class Test {
         // PrimitiveTypeTest();
         // charTest();
         //printfDateTest();
-        instantTest();
+        //instantTest();
+        fileTest();
     }
 }

@@ -5,27 +5,24 @@ import com.alibaba.fastjson.JSONObject;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.*;
-import io.searchbox.core.search.aggregation.SumAggregation;
 import io.searchbox.indices.Analyze;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.GetMapping;
 import io.searchbox.indices.mapping.PutMapping;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.script.Script;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramAggregationBuilder;
-import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
-import org.elasticsearch.search.aggregations.bucket.range.date.DateRangeAggregationBuilder;
-import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -211,24 +208,20 @@ public class JestService {
 
         BoolQueryBuilder parentQuery = QueryBuilders.boolQuery();
         //parentQuery.filter(QueryBuilders.existsQuery("asr_agent"));
-        parentQuery.filter(QueryBuilders.matchAllQuery());
+        parentQuery.filter(QueryBuilders.existsQuery("asr_customer"));
+        parentQuery.filter(QueryBuilders.rangeQuery("end_time").gte(1504195200).lt(1505491200));
+        //parentQuery.filter(QueryBuilders.matchAllQuery());
 
 
-        // 构建agg对象，默认返回前100条记录
-        SumAggregationBuilder agg = AggregationBuilders.sum("total_bridge_duration").field
-                ("bridge_duration");
+        // 构建agg对象
+        SumAggregationBuilder agg = AggregationBuilders.sum("total_bridge_duration")
+                .field("bridge_duration");
 
-        Script script = new Script("scriptId");
-
-        DateHistogramAggregationBuilder interval = AggregationBuilders.dateHistogram("dateHistogram").field
-                ("end_time").dateHistogramInterval(new DateHistogramInterval("day"));
-        interval.subAggregation(agg);
-
-
-        searchSourceBuilder.query(parentQuery).from(0).size(1024).aggregation(interval);
+        searchSourceBuilder.fetchSource("bridge_duration", null).query(parentQuery).from(0).size(100000);
         System.out.println(searchSourceBuilder.toString());
 
-        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("cdr_3000000_201708")
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex
+                ("cdr_*_201710")
                 .ignoreUnavailable(true).allowNoIndices(true).build();
 
         SearchResult searchResult = null;
@@ -243,6 +236,45 @@ public class JestService {
         JSONObject fastResult = JSON.parseObject(jsonString);
         JSONObject aggregations = fastResult.getJSONObject("aggregations");
 
-        return aggregations.toJSONString();
+        return jsonString;
     }
+
+    public void processFile() {
+        List<File> files = getFiles("C:\\Users\\李政\\Desktop\\企业asr数据");
+        for (File f : files) {
+            try
+            {
+                BufferedReader in = new BufferedReader(new FileReader(f));
+                String str;
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((str = in.readLine()) != null)
+                {
+                    stringBuilder.append(str);
+                }
+                in.close();
+
+                JSONObject jsonObject = JSON.parseObject(stringBuilder.toString());
+                System.out.println(jsonObject.getInteger("duration")+"==="+jsonObject.getString("taskId"));
+            }
+            catch (IOException e)
+            {
+                e.getStackTrace();
+            }
+        }
+    }
+
+    public static List<File> getFiles(String path) {
+        File root = new File(path);
+        List<File> files = new ArrayList<File>();
+        if (!root.isDirectory()) {
+            files.add(root);
+        } else {
+            File[] subFiles = root.listFiles();
+            for (File f : subFiles) {
+                files.addAll(getFiles(f.getAbsolutePath()));
+            }
+        }
+        return files;
+    }
+
 }

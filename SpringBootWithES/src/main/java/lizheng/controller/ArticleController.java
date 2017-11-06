@@ -56,7 +56,8 @@ public class ArticleController {
 	
 	@GetMapping(value = "/hello")
 	public String hello() throws Exception{
-		return jestService.generateSearchString();
+		jestService.processFile();
+		return "hello";
 	}
 	
 	@GetMapping(value = "/analyze")
