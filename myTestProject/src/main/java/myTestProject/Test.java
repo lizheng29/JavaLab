@@ -155,6 +155,15 @@ public class Test {
         System.out.println(stringBuffer.reverse());
 
         str.charAt(0); // 不可用：str[0]
+
+
+        String errorMessage = "";
+        //errorMessage += 123;
+        if(errorMessage.length()!=0){
+            System.out.println("errorMessage:"+errorMessage);
+        }else {
+            System.out.println("errorMessage:"+errorMessage);
+        }
     }
 
     public static void PrimitiveTypeTest() {
@@ -270,6 +279,9 @@ public class Test {
         if (cdrTime.plusHours(6).isBefore(LocalDateTime.now())) {
             System.out.println("从" + cdrTime + "到现在，超过了6小时");
         }
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        System.out.println(localDateTime.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分ss秒")));
     }
 
     public static void fileTest() {
@@ -299,7 +311,33 @@ public class Test {
             e.printStackTrace();
         }
 
+    }
 
+    public static void paramTest(){
+
+        int a = 10;
+        Persion persion = new Persion(20);
+
+        System.out.println("原来的值：  "+a+"   "+persion.age);
+
+        print(a,persion);
+
+        System.out.println("方法外的值："+a+"   "+persion.age);
+        System.out.println("所以，a是值传递，没有改变原来的值，person是引用传递，改变了原来的值");
+
+    }
+
+    public static void print(int a, Persion persion){
+        a++;
+        persion.age++;
+        System.out.println("方法内的值："+a+"   "+persion.age);
+    }
+
+    static class Persion {
+        public int age;
+        Persion(int age){
+            this.age=age;
+        }
     }
 
     public static void main(String[] args) {
@@ -308,11 +346,12 @@ public class Test {
         // lambdaTest();
         //plusAndMinusTest();
         // setTest();
-        // stringTest();
-        // PrimitiveTypeTest();
+         //stringTest();
+        //PrimitiveTypeTest();
         // charTest();
         //printfDateTest();
-        //instantTest();
-        fileTest();
+        instantTest();
+        //fileTest();
+        //paramTest();
     }
 }
