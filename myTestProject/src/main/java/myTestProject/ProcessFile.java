@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 李政
@@ -18,16 +20,8 @@ public class ProcessFile {
 
         try {
             List<File> files = getFiles("C:\\Users\\李政\\Desktop\\3003802");
-            int lineNume = 1;
-            File file = new File("C:\\Users\\李政\\Desktop\\3003802\\AsrResult.txt");
 
-
-            file.createNewFile();
-
-            FileWriter fileWritter = new FileWriter(file, true);
-
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWritter);
-
+            List<JSONObject> allAsr = new ArrayList<>(600);
             for (File f : files) {
 
                 BufferedReader in = new BufferedReader(new FileReader(f));
@@ -39,15 +33,76 @@ public class ProcessFile {
 
                 in.close();
                 JSONObject jsonObject = JSON.parseObject(stringBuilder.toString());
-                String result = jsonObject.getJSONObject("jsonResult").getJSONArray("result").toJSONString();
-                System.out.println(lineNume);
-                String data = lineNume + ":" + result;
-                bufferedWriter.write(data);
-                bufferedWriter.newLine();
-                lineNume++;
+                allAsr.add(jsonObject);
 
             }
 
+
+            // 旧方法效率低
+            /*Map<String, Map<String, String>> stringMapMap = new HashMap<>();
+            for (JSONObject one : allAsr) {
+                String uniqueId = one.getString("uniqueId");
+                String recordSide = one.getString("recordSide");
+
+                String result = one.getJSONObject("jsonResult").getJSONArray("result").toJSONString();
+                String data = recordSide + result;
+
+
+                Map<String, String> inner = new HashMap<>();
+                inner.put(recordSide, data);
+
+
+                for (JSONObject two : allAsr) {
+                    String uniqueId2 = two.getString("uniqueId");
+                    String recordSide2 = two.getString("recordSide");
+                    if (uniqueId.equals(uniqueId2) && !recordSide.equals(recordSide2)) {
+                        String result2 = two.getJSONObject("jsonResult").getJSONArray("result").toJSONString();
+                        String data2 = recordSide2 + result2;
+
+                        inner.put(recordSide2, data2);
+
+                    }
+                }
+                stringMapMap.put(uniqueId, inner);
+            }*/
+
+            // 新方法效率高
+            Map<String, Map<String, String>> stringMapMap2 = new HashMap<>();
+            for (JSONObject one : allAsr) {
+                String uniqueId = one.getString("uniqueId");
+                String recordSide = one.getString("recordSide");
+
+                String result = one.getJSONObject("jsonResult").getJSONArray("result").toJSONString();
+                String data = recordSide + result;
+
+                Map<String, String> inner;
+                if (!stringMapMap2.containsKey(uniqueId)) {
+                    inner = new HashMap<>();
+                    inner.put(recordSide, data);
+                } else {
+                    inner = stringMapMap2.get(uniqueId);
+                    inner.put(recordSide, data);
+                }
+                stringMapMap2.put(uniqueId, inner);
+            }
+
+            System.out.println("new method size：" + stringMapMap2.size());
+
+
+            File file = new File("C:\\Users\\李政\\Desktop\\3003802\\AsrResult.txt");
+            file.createNewFile();
+            FileWriter fileWritter = new FileWriter(file, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWritter);
+            int lineNume = 1;
+            for (Map<String, String> inAndOut : stringMapMap2.values()) {
+
+                for (String asr : inAndOut.values()) {
+                    bufferedWriter.write(lineNume + ":" + asr);
+                    bufferedWriter.newLine();
+                }
+                lineNume++;
+                bufferedWriter.newLine();
+            }
 
             bufferedWriter.flush();
             bufferedWriter.close();
