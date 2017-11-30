@@ -340,6 +340,18 @@ public class Test {
         }
     }
 
+    static void aesTest(){
+        String text = "3004414-20171024145142-18703881273-01043989530-record-10.10.62.252";
+        String password = "fdfdfdfdfdfdfdfdfdf";
+        String after = AesUtil.encrypt(text,password);
+
+        String decrypted = AesUtil.decrypt(after,password);
+
+        System.out.println(text);
+        System.out.println(after);
+        System.out.println(decrypted);
+    }
+
     public static void main(String[] args) {
         // calendarTest();
         // hashTest();
@@ -350,8 +362,9 @@ public class Test {
         //PrimitiveTypeTest();
         // charTest();
         //printfDateTest();
-        instantTest();
+        //instantTest();
         //fileTest();
         //paramTest();
+        aesTest();
     }
 }

@@ -71,9 +71,25 @@ public class ProcessFile {
             for (JSONObject one : allAsr) {
                 String uniqueId = one.getString("uniqueId");
                 String recordSide = one.getString("recordSide");
+                Integer callType = one.getInteger("callType");
 
                 String result = one.getJSONObject("jsonResult").getJSONArray("result").toJSONString();
-                String data = recordSide + result;
+
+                String data;
+                if (callType == 1 || callType == 2) {
+                    if (recordSide.equals("OUT")) {
+                        data = "坐席侧：" + result;
+                    } else {
+                        data = "客户侧：" + result;
+                    }
+                } else {
+                    if (recordSide.equals("OUT")) {
+                        data = "客户侧：" + result;
+                    } else {
+                        data = "坐席侧：" + result;
+                    }
+                }
+
 
                 Map<String, String> inner;
                 if (!stringMapMap2.containsKey(uniqueId)) {
