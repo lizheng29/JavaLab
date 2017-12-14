@@ -1,57 +1,62 @@
 package com.lizheng.play.model;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Person {
-	
-	@Id
-	@GeneratedValue
-	private Integer id;
-	
-	private String name;
-	
-	private Integer age;
-	
-	private Integer length;
 
-	public Person(){
-	}
-	
-	public Integer getId() {
-		return id;
-	}
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    @NotNull(message = "{name.not.null}")
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    @Range(min = 0, max = 180, message = "{age.range}")
+    private Integer age;
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
-	public Integer getAge() {
-		return age;
-	}
+    private Integer length;
 
-	public void setAge(Integer age) {
-		this.age = age;
-	}
+    public Person() {
+    }
 
-	public Integer getLength() {
-		return length;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setLength(Integer length) {
-		this.length = length;
-	}
-	
-	
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
+
 
 }

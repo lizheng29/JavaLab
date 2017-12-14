@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <title>MyHtml.html</title>
 	
@@ -15,6 +15,8 @@
     <p th:text="'random number : '+${random}">这里不显示？</p>
     
     <a th:href="@{http://www.baidu.com}">百度</a>
+
+    <p th:text="${smothing_not_exist}">原本的文字</p>
     
     <table>
     <tr>
@@ -24,7 +26,7 @@
       <th>del</th>
     </tr>
     <tr th:each="person : ${persons}">
-      <td th:text="${person.name}">默认名字？</td>
+      <td th:utext="${person.name}">默认名字？</td>
       <td th:text="${person.age}+'岁'">2.41</td>
       <td th:text="${person.length}+'cm'">123</td>
       <td><a th:href="@{/delete/{id}(id=${person.id})}">删除</a></td>
@@ -35,6 +37,7 @@
     	
     	<span>姓名：</span> <input type="text" name="name" value="" th:field="*{name}" />  
     	<input type="submit" value="生成" />
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
   </body>
 </html>

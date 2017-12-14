@@ -252,7 +252,7 @@ public class Test {
         // 获取北京时间
         Instant now = Instant.now();
         OffsetDateTime bjNow = now.atOffset(ZoneOffset.ofHours(8));
-        OffsetDateTime bjBefore = bjNow.plusMinutes(-30);
+        OffsetDateTime bjBefore = bjNow.plusDays(-1);
         System.out.println(bjNow);
         System.out.println(bjBefore);
 
@@ -282,6 +282,9 @@ public class Test {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         System.out.println(localDateTime.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分ss秒")));
+
+        Long time = Instant.now().plusSeconds(180).toEpochMilli();
+        System.out.println("time.toString():"+time.toString());
     }
 
     public static void fileTest() {
@@ -352,6 +355,14 @@ public class Test {
         System.out.println(decrypted);
     }
 
+
+    static void doubleTest(){
+
+        double d = 1.51211280124E12;
+        long l = 1512112801240L;
+        System.out.println(d==l);
+    }
+
     public static void main(String[] args) {
         // calendarTest();
         // hashTest();
@@ -362,9 +373,9 @@ public class Test {
         //PrimitiveTypeTest();
         // charTest();
         //printfDateTest();
-        //instantTest();
+        instantTest();
         //fileTest();
         //paramTest();
-        aesTest();
+        //aesTest();
     }
 }
