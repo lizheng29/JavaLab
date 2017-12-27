@@ -173,5 +173,16 @@ public class PlayController {
         return "没毛病";
     }
 
+    @PostMapping("/asr")
+    @ResponseBody
+    public String testAsr(){
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "result";
+    }
+
 
 }

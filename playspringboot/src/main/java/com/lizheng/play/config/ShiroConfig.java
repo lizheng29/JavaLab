@@ -12,7 +12,7 @@ import org.apache.shiro.mgt.SecurityManager;
 
 import com.lizheng.play.shiro.MyShiroRealm;
 
-@Configuration
+//@Configuration
 public class ShiroConfig extends Object {
 
 	/**

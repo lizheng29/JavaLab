@@ -25,6 +25,11 @@ public class ParamValidateConfig {
         return localValidatorFactoryBean;
     }
 
+
+    /**
+     * 加这个bean是为了验证方法里单个的参数
+     * @return MethodValidationPostProcessor
+     */
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {
 
