@@ -19,9 +19,9 @@ public class ProcessFile {
     private static void processFile() {
 
         try {
-            List<File> files = getFiles("C:\\Users\\李政\\Desktop\\3003802");
+            List<File> files = getFiles("C:\\Users\\李政\\Desktop\\TiNetAsr\\2315003");
 
-            List<JSONObject> allAsr = new ArrayList<>(600);
+            List<JSONObject> allAsr = new ArrayList<>(10000);
             for (File f : files) {
 
                 BufferedReader in = new BufferedReader(new FileReader(f));
@@ -105,7 +105,7 @@ public class ProcessFile {
             System.out.println("new method size：" + stringMapMap2.size());
 
 
-            File file = new File("C:\\Users\\李政\\Desktop\\3003802\\AsrResult.txt");
+            File file = new File("C:\\Users\\李政\\Desktop\\TiNetAsr\\2315003\\AsrResult2315003.txt");
             file.createNewFile();
             FileWriter fileWritter = new FileWriter(file, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWritter);

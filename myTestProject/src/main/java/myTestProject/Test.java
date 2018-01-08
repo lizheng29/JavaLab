@@ -2,7 +2,6 @@ package myTestProject;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -363,6 +362,16 @@ public class Test {
         System.out.println(d==l);
     }
 
+    private static void hanio(int n, char a, char b, char c) {
+        if (n == 1)
+            System.out.println("移动" + n + "号盘子从" + a + "到" + c);
+        else {
+            hanio(n - 1, a, c, b);//把上面n-1个盘子从a借助c搬到b
+            System.out.println("移动" + n + "号盘子从" + a + "到" + c);//紧接着直接把n搬动c
+            hanio(n - 1, b, a, c);//再把b上的n-1个盘子借助a搬到c
+        }
+    }
+
     public static void main(String[] args) {
         // calendarTest();
         // hashTest();
@@ -373,9 +382,10 @@ public class Test {
         //PrimitiveTypeTest();
         // charTest();
         //printfDateTest();
-        instantTest();
+        //instantTest();
         //fileTest();
         //paramTest();
         //aesTest();
+        hanio(3,'A','B','C');
     }
 }
