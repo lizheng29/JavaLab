@@ -372,6 +372,35 @@ public class Test {
         }
     }
 
+    private static void stringReplaceTest(){
+        String s1 = "13241234324天人荣通123412341234";
+        System.out.println(s1.replaceAll("天..通","天润融通"));
+    }
+
+    private static boolean isIsomorphic(String s, String t){
+        Map<Character,Character> record = new HashMap<>();
+        char[] charArray = t.toCharArray();
+        for (int i = 0;i<s.length();i++){
+                Character after = record.get(t.charAt(i));
+                if(after!=null){
+                    charArray[i] = after;
+                }else {
+                    if(record.containsValue(s.charAt(i))){
+                        return false;
+                    }
+                    record.put(t.charAt(i),s.charAt(i));
+                    charArray[i] = s.charAt(i);
+                }
+        }
+        if(String.valueOf(charArray).equals(s)){
+            System.out.println("true");
+            return true;
+        }else {
+            System.out.println("false");
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         // calendarTest();
         // hashTest();
@@ -386,6 +415,8 @@ public class Test {
         //fileTest();
         //paramTest();
         //aesTest();
-        hanio(3,'A','B','C');
+        //hanio(3,'A','B','C');
+        //stringReplaceTest();
+        isIsomorphic("aba","baa");
     }
 }

@@ -1,6 +1,7 @@
 package myTestProject;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.*;
@@ -19,7 +20,7 @@ public class ProcessFile {
     private static void processFile() {
 
         try {
-            List<File> files = getFiles("C:\\Users\\李政\\Desktop\\TiNetAsr\\2315003");
+            List<File> files = getFiles("C:\\Users\\李政\\Desktop\\ASR\\TiNetAsr\\2315003");
 
             List<JSONObject> allAsr = new ArrayList<>(10000);
             for (File f : files) {
@@ -36,35 +37,6 @@ public class ProcessFile {
                 allAsr.add(jsonObject);
 
             }
-
-
-            // 旧方法效率低
-            /*Map<String, Map<String, String>> stringMapMap = new HashMap<>();
-            for (JSONObject one : allAsr) {
-                String uniqueId = one.getString("uniqueId");
-                String recordSide = one.getString("recordSide");
-
-                String result = one.getJSONObject("jsonResult").getJSONArray("result").toJSONString();
-                String data = recordSide + result;
-
-
-                Map<String, String> inner = new HashMap<>();
-                inner.put(recordSide, data);
-
-
-                for (JSONObject two : allAsr) {
-                    String uniqueId2 = two.getString("uniqueId");
-                    String recordSide2 = two.getString("recordSide");
-                    if (uniqueId.equals(uniqueId2) && !recordSide.equals(recordSide2)) {
-                        String result2 = two.getJSONObject("jsonResult").getJSONArray("result").toJSONString();
-                        String data2 = recordSide2 + result2;
-
-                        inner.put(recordSide2, data2);
-
-                    }
-                }
-                stringMapMap.put(uniqueId, inner);
-            }*/
 
             // 新方法效率高
             Map<String, Map<String, String>> stringMapMap2 = new HashMap<>();
@@ -105,17 +77,38 @@ public class ProcessFile {
             System.out.println("new method size：" + stringMapMap2.size());
 
 
-            File file = new File("C:\\Users\\李政\\Desktop\\TiNetAsr\\2315003\\AsrResult2315003.txt");
+            File file = new File("C:\\Users\\李政\\Desktop\\AsrResult3005132.txt");
             file.createNewFile();
             FileWriter fileWritter = new FileWriter(file, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWritter);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("排队时长","3分钟");
+            jsonObject.put("通话时长","2分钟");
+            jsonObject.put("访客姓名","默认访客姓名");
+            jsonObject.put("客服工号","000000");
+            jsonObject.put("会话id","111111");
+            jsonObject.put("访客id","222222");
+            jsonObject.put("访客性别","男");
+            jsonObject.put("用户评分","满意");
+            jsonObject.put("会话开始时间","1516089131");
+            jsonObject.put("会话结束时间","1516089136");
+//            jsonObject.put("排队时长","");
+//            jsonObject.put("排队时长","");
+
             int lineNume = 1;
             for (Map<String, String> inAndOut : stringMapMap2.values()) {
 
                 for (String asr : inAndOut.values()) {
-                    bufferedWriter.write(lineNume + ":" + asr);
+                    //bufferedWriter.write(lineNume + ":" + asr);
+                    if (asr.contains("客户侧：")) {
+                        jsonObject.put("访客内容", getTextDevideBySpace(asr));
+                    } else {
+                        jsonObject.put("客服内容", getTextDevideBySpace(asr));
+                    }
                     bufferedWriter.newLine();
                 }
+                bufferedWriter.write(jsonObject.toJSONString());
                 lineNume++;
                 bufferedWriter.newLine();
             }
@@ -141,6 +134,21 @@ public class ProcessFile {
             }
         }
         return files;
+    }
+
+    private static String getTextDevideBySpace(String asrArrayStringWithPrefix){
+        String asrArrayString = asrArrayStringWithPrefix.substring(4);
+        JSONArray jsonArray = JSON.parseArray(asrArrayString);
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(Object sentence:jsonArray){
+            JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(sentence));
+            stringBuilder.append(jsonObject.getString("text"));
+            stringBuilder.append(" ");
+        }
+
+        return stringBuilder.toString();
     }
 
 
