@@ -45,7 +45,6 @@ public class Test {
 
         // 1. 不需要参数,返回值为 5
         // System.out.println(() -> 5);
-
         // 2. 接收一个参数(数字类型),返回其2倍的值
         Consumer<Integer> consumer1 = x -> System.out.println("x*2=" + x * 2);
         consumer1.accept(6);
