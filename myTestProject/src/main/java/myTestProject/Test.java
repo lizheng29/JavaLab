@@ -6,11 +6,24 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IntSummaryStatistics;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -157,10 +170,10 @@ public class Test {
 
         String errorMessage = "";
         //errorMessage += 123;
-        if(errorMessage.length()!=0){
-            System.out.println("errorMessage:"+errorMessage);
-        }else {
-            System.out.println("errorMessage:"+errorMessage);
+        if (errorMessage.length() != 0) {
+            System.out.println("errorMessage:" + errorMessage);
+        } else {
+            System.out.println("errorMessage:" + errorMessage);
         }
     }
 
@@ -282,7 +295,7 @@ public class Test {
         System.out.println(localDateTime.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分ss秒")));
 
         Long time = Instant.now().plusSeconds(180).toEpochMilli();
-        System.out.println("time.toString():"+time.toString());
+        System.out.println("time.toString():" + time.toString());
     }
 
     public static void fileTest() {
@@ -314,39 +327,40 @@ public class Test {
 
     }
 
-    public static void paramTest(){
+    public static void paramTest() {
 
         int a = 10;
         Persion persion = new Persion(20);
 
-        System.out.println("原来的值：  "+a+"   "+persion.age);
+        System.out.println("原来的值：  " + a + "   " + persion.age);
 
-        print(a,persion);
+        print(a, persion);
 
-        System.out.println("方法外的值："+a+"   "+persion.age);
+        System.out.println("方法外的值：" + a + "   " + persion.age);
         System.out.println("所以，a是值传递，没有改变原来的值，person是引用传递，改变了原来的值");
 
     }
 
-    public static void print(int a, Persion persion){
+    public static void print(int a, Persion persion) {
         a++;
         persion.age++;
-        System.out.println("方法内的值："+a+"   "+persion.age);
+        System.out.println("方法内的值：" + a + "   " + persion.age);
     }
 
     static class Persion {
         public int age;
-        Persion(int age){
-            this.age=age;
+
+        Persion(int age) {
+            this.age = age;
         }
     }
 
-    static void aesTest(){
+    static void aesTest() {
         String text = "3004414-20171024145142-18703881273-01043989530-record-10.10.62.252";
         String password = "fdfdfdfdfdfdfdfdfdf";
-        String after = AesUtil.encrypt(text,password);
+        String after = AesUtil.encrypt(text, password);
 
-        String decrypted = AesUtil.decrypt(after,password);
+        String decrypted = AesUtil.decrypt(after, password);
 
         System.out.println(text);
         System.out.println(after);
@@ -354,11 +368,11 @@ public class Test {
     }
 
 
-    static void doubleTest(){
+    static void doubleTest() {
 
         double d = 1.51211280124E12;
         long l = 1512112801240L;
-        System.out.println(d==l);
+        System.out.println(d == l);
     }
 
     private static void hanio(int n, char a, char b, char c) {
@@ -371,33 +385,46 @@ public class Test {
         }
     }
 
-    private static void stringReplaceTest(){
+    private static void stringReplaceTest() {
         String s1 = "13241234324天人荣通123412341234";
-        System.out.println(s1.replaceAll("天..通","天润融通"));
+        System.out.println(s1.replaceAll("天..通", "天润融通"));
     }
 
-    private static boolean isIsomorphic(String s, String t){
-        Map<Character,Character> record = new HashMap<>();
+    private static boolean isIsomorphic(String s, String t) {
+        Map<Character, Character> record = new HashMap<>();
         char[] charArray = t.toCharArray();
-        for (int i = 0;i<s.length();i++){
-                Character after = record.get(t.charAt(i));
-                if(after!=null){
-                    charArray[i] = after;
-                }else {
-                    if(record.containsValue(s.charAt(i))){
-                        return false;
-                    }
-                    record.put(t.charAt(i),s.charAt(i));
-                    charArray[i] = s.charAt(i);
+        for (int i = 0; i < s.length(); i++) {
+            Character after = record.get(t.charAt(i));
+            if (after != null) {
+                charArray[i] = after;
+            } else {
+                if (record.containsValue(s.charAt(i))) {
+                    return false;
                 }
+                record.put(t.charAt(i), s.charAt(i));
+                charArray[i] = s.charAt(i);
+            }
         }
-        if(String.valueOf(charArray).equals(s)){
+        if (String.valueOf(charArray).equals(s)) {
             System.out.println("true");
             return true;
-        }else {
+        } else {
             System.out.println("false");
             return false;
         }
+    }
+
+    private static void localDateTest() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse("2018-05-01", formatter);
+        //LocalDateTime localDateTime = LocalDateTime.parse("2018-05-01",formatter);
+        //long epochMilli = localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = localDate.atStartOfDay(zoneId);
+
+        long epochMilli = zonedDateTime.toInstant().toEpochMilli();
+        System.out.println(epochMilli);
+        System.out.println(localDate.atTime(LocalTime.MIDNIGHT).toInstant(ZoneOffset.ofHours(8)).toEpochMilli());
     }
 
     public static void main(String[] args) {
@@ -406,7 +433,7 @@ public class Test {
         // lambdaTest();
         //plusAndMinusTest();
         // setTest();
-         //stringTest();
+        //stringTest();
         //PrimitiveTypeTest();
         // charTest();
         //printfDateTest();
@@ -416,6 +443,7 @@ public class Test {
         //aesTest();
         //hanio(3,'A','B','C');
         //stringReplaceTest();
-        isIsomorphic("aba","baa");
+        //isIsomorphic("aba","baa");
+        localDateTest();
     }
 }

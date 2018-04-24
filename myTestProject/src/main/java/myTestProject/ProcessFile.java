@@ -4,7 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,16 +88,16 @@ public class ProcessFile {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWritter);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("排队时长","3分钟");
-            jsonObject.put("通话时长","2分钟");
-            jsonObject.put("访客姓名","默认访客姓名");
-            jsonObject.put("客服工号","000000");
-            jsonObject.put("会话id","111111");
-            jsonObject.put("访客id","222222");
-            jsonObject.put("访客性别","男");
-            jsonObject.put("用户评分","满意");
-            jsonObject.put("会话开始时间","1516089131");
-            jsonObject.put("会话结束时间","1516089136");
+            jsonObject.put("排队时长", "3分钟");
+            jsonObject.put("通话时长", "2分钟");
+            jsonObject.put("访客姓名", "默认访客姓名");
+            jsonObject.put("客服工号", "000000");
+            jsonObject.put("会话id", "111111");
+            jsonObject.put("访客id", "222222");
+            jsonObject.put("访客性别", "男");
+            jsonObject.put("用户评分", "满意");
+            jsonObject.put("会话开始时间", "1516089131");
+            jsonObject.put("会话结束时间", "1516089136");
 //            jsonObject.put("排队时长","");
 //            jsonObject.put("排队时长","");
 
@@ -136,13 +141,13 @@ public class ProcessFile {
         return files;
     }
 
-    private static String getTextDevideBySpace(String asrArrayStringWithPrefix){
+    private static String getTextDevideBySpace(String asrArrayStringWithPrefix) {
         String asrArrayString = asrArrayStringWithPrefix.substring(4);
         JSONArray jsonArray = JSON.parseArray(asrArrayString);
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        for(Object sentence:jsonArray){
+        for (Object sentence : jsonArray) {
             JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(sentence));
             stringBuilder.append(jsonObject.getString("text"));
             stringBuilder.append(" ");
