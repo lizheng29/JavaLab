@@ -427,6 +427,10 @@ public class Test {
         System.out.println(localDate.atTime(LocalTime.MIDNIGHT).toInstant(ZoneOffset.ofHours(8)).toEpochMilli());
     }
 
+    private static void longPraseTest() {
+        System.out.println(Long.parseLong("0"));
+    }
+
     public static void main(String[] args) {
         // calendarTest();
         // hashTest();
@@ -444,6 +448,7 @@ public class Test {
         //hanio(3,'A','B','C');
         //stringReplaceTest();
         //isIsomorphic("aba","baa");
-        localDateTest();
+        //localDateTest();
+        longPraseTest();
     }
 }
