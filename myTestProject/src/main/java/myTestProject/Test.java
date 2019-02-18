@@ -431,6 +431,32 @@ public class Test {
         System.out.println(Long.parseLong("0"));
     }
 
+    private static void maxSubSequenceSum() {
+        int[] source = new int[]{-2, 11, -4, 13, -5, -2};
+
+        if (source.length <= 1) {
+            return;
+        }
+        int[] dp = new int[source.length];
+        dp[0] = source[0];
+
+        for (int i = 1; i < source.length; i++) {
+            dp[i] = Math.max(dp[i - 1] + source[i], source[i]);
+        }
+
+        int result = 0;
+        for (int j = 0; j < dp.length; j++) {
+            if (result < dp[j]) {
+                result = dp[j];
+            }
+//            System.out.print(" " + dp[j] + "");
+        }
+        for (int k = 0; k < source.length; k++) {
+            System.out.print(source[k] + ",");
+        }
+        System.out.println("最大子序列和:" + result);
+    }
+
 
     public static void main(String[] args) {
         // calendarTest();
@@ -450,6 +476,7 @@ public class Test {
         //stringReplaceTest();
         //isIsomorphic("aba","baa");
         //localDateTest();
-        longPraseTest();
+        //longPraseTest();
+        maxSubSequenceSum();
     }
 }
