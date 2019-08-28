@@ -33,7 +33,7 @@ public class JavaObjectDiffTest {
         System.out.println(diff.childCount());
 
 
-        diff.visit(new DiffNode.Visitor() {
+        /*diff.visit(new DiffNode.Visitor() {
             @Override
             public void node(DiffNode node, Visit visit) {
                 final Object baseValue = node.canonicalGet(p1);
@@ -44,6 +44,16 @@ public class JavaObjectDiffTest {
 
                 System.out.println(node.getPath() + " => " + node.getState());
             }
+        });*/
+
+        diff.visit((node,visit) -> {
+            final Object baseValue = node.canonicalGet(p1);
+            final Object workingValue = node.canonicalGet(p2);
+            final String message = node.getPath() + " changed from " +
+                    baseValue + " to " + workingValue;
+            System.out.println(message);
+
+            System.out.println(node.getPath() + " => " + node.getState());
         });
     }
 }
