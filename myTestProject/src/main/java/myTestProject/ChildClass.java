@@ -1,7 +1,5 @@
 package myTestProject;
 
-import com.alibaba.fastjson.JSON;
-
 /**
  * @description: 测试有继承关系的类的序列化结果
  * @author: lizheng29
@@ -24,6 +22,6 @@ public class ChildClass extends FatherClass {
         childClass.setFatherName("f");
         childClass.setChildName("c");
 
-        System.out.println("=================="+JSON.toJSONString(childClass));
+//        System.out.println("=================="+JSON.toJSONString(childClass));
     }
 }
