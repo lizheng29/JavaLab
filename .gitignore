@@ -2,3 +2,4 @@ playspringboot/target/
 playspringboot/.idea/
 myTestProject/.idea/
 myTestProject/target/
+*.iml
