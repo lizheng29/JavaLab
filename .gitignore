@@ -1,0 +1,4 @@
+playspringboot/target/
+playspringboot/.idea/
+myTestProject/.idea/
+*.class
