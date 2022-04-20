@@ -1,8 +1,7 @@
 package myTestProject;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,36 +14,29 @@ public class HelpFriend {
     public static void main(String[] args) {
 
         StringBuffer allString = new StringBuffer();
-        Path path = Paths.get("C:\\Users\\lizheng\\Desktop\\111.txt");
+        Path path = Paths.get("D:\\111.txt");
         try {
             List<String> lines = Files.readAllLines(path);
             lines.forEach(allString::append);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(allString);
+//        System.out.println(allString);
 
-        String source = "Stroke[Mesh] OR Strokes[Title/Abstract] OR Cerebrovascular Accident[Title/Abstract] OR " +
-                "Cerebrovascular Accidents[Title/Abstract] OR CVA (Cerebrovascular Accident)[Title/Abstract] OR CVAs " +
-                "(Cerebrovascular Accident)[Title/Abstract] OR Cerebrovascular Apoplexy[Title/Abstract] OR Apoplexy, " +
-                "Cerebrovascular[Title/Abstract] OR Vascular Accident, Brain[Title/Abstract] OR Brain Vascular " +
-                "Accident[Title/Abstract] OR Brain Vascular Accidents[Title/Abstract] OR Vascular Accidents, " +
-                "Brain[Title/Abstract] OR Cerebrovascular Stroke[Title/Abstract] OR Cerebrovascular " +
-                "Strokes[Title/Abstract] OR Stroke, Cerebrovascular[Title/Abstract] OR Strokes, " +
-                "Cerebrovascular[Title/Abstract] OR";
+        String source = allString.toString();
 
         Set<Character> stopWords = new HashSet<>();
         stopWords.add(' ');
         stopWords.add(',');
-
+        int replaceCount = 0;
         while (true) {
-            int index = StringUtils.indexOf(source, "[Title/Abstract]");
+            int index = source.indexOf("[Title/Abstract]");
             if (index == -1) {
                 break;
             }
             int lastCharIndex = index;
             int firstCharIndex = lastCharIndex;
-            if (source.charAt(lastCharIndex-1) == ')') {
+            if (source.charAt(lastCharIndex - 1) == ')') {
                 while (source.charAt(firstCharIndex) != '(') {
                     firstCharIndex--;
                 }
@@ -54,9 +46,19 @@ public class HelpFriend {
                     firstCharIndex--;
                 }
             }
-            String word = StringUtils.substring(source, firstCharIndex + 1, lastCharIndex);
+            String word = source.substring(firstCharIndex + 1, lastCharIndex);
             source = source.replace(word + "[Title/Abstract]", "'  " + word + "   ':ab,ti");
-            System.out.println(source);
+//            System.out.println(source);
+            replaceCount++;
         }
+        Path path2 = Paths.get("D:\\222.txt");
+        try {
+            Files.deleteIfExists(path2);
+            Files.createFile(path2);
+            Files.write(path2, source.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("替换了 " + replaceCount + " 处");
     }
 }
